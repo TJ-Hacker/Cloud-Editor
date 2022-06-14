@@ -1,3 +1,4 @@
+import os
 import subprocess
 from flask import Flask
 from flask_cors import CORS
@@ -20,6 +21,18 @@ def runCommand(cmd):
 
 app = Flask(__name__)
 CORS(app)
+
+@app.route("/create/<fileName>", methods = ['GET', 'POST'])
+def createFile(fileName):
+    data = "print(\"Hello World!\")"
+    path = "./DevEnv"
+    with open(os.path.join(path, fileName), "w") as fileF:
+        fileF.write(data)
+    return "File Created!"
+
+@app.route("/file/<filePath>")
+def getFileData(filePath):
+    return "File at", filePath
 
 @app.route("/shell/<command>")
 def sendCommand(command):

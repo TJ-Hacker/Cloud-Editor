@@ -18,10 +18,14 @@
           <input type="submit" value="Submit" id="submitButton">
         </form>
 
-        <pre id="consoleOut">Output: This is a test</pre>
+        <pre id="consoleOut">Console Output Is Shown Here</pre>
       </div>
       <div id="fileOpener" class="control">
-
+        <form id="fileChooser">
+          <label for="filePath">File Name:</label>
+          <input type="text" id="filePath" name="filePath">
+          <input type="submit" value="Submit" id="fileSubmitButton">
+        </form>
       </div>
     </div>
     <!-- Ace Text Editor -->
@@ -30,5 +34,6 @@
     <!-- --------------- -->
 
     <script src="./scripts/commandSender.js"></script>
+    <script src="./scripts/fileChooser.js"></script>
   </body>
 </html>

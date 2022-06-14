@@ -1,7 +1,7 @@
-const submitButton = document.getElementById("submitButton")
+const submitButton = document.getElementById("submitButton");
 
-var ip = "http://71.167.25.60"
-var port = "5000"
+var ip = "http://71.167.25.60";
+var port = "5000";
 
 submitButton.addEventListener("click", () => {
   command = document.getElementById("command").value;
@@ -11,19 +11,19 @@ submitButton.addEventListener("click", () => {
 
 function sendCommand(command) {
   url = ip + ":" + port + "/shell/" + command
-  httpGetAsync(url)
+  httpGetAsync(url, updateConsole)
 }
 
 function updateConsole(output) {
   document.getElementById("consoleOut").innerHTML = output;
 }
 
-function httpGetAsync(url)
+function httpGetAsync(url, func)
 {
     var xmlHttp = new XMLHttpRequest();
     xmlHttp.onreadystatechange = function() {
         if (xmlHttp.readyState == 4 && xmlHttp.status == 200)
-            updateConsole(xmlHttp.responseText);
+            func(xmlHttp.responseText);
     }
     xmlHttp.open("GET", url, true);
     xmlHttp.setRequestHeader("Access-Control-Allow-Origin", "*");
