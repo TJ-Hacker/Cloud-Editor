@@ -26,6 +26,7 @@ function httpGetAsync(url)
             updateConsole(xmlHttp.responseText);
     }
     xmlHttp.open("GET", url, true);
+    xmlHttp.setRequestHeader("Access-Control-Allow-Origin", "*");
     xmlHttp.send(null);
 }
 

