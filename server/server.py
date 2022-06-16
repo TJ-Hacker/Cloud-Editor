@@ -1,6 +1,7 @@
 import os
 import subprocess
-from flask import Flask
+# from flask import Flask
+from flask import *
 from flask_cors import CORS
 
 def formatOut(res):
@@ -22,17 +23,27 @@ def runCommand(cmd):
 app = Flask(__name__)
 CORS(app)
 
-@app.route("/create/<fileName>", methods = ['GET', 'POST'])
+# Should receive a json object with the text to update in the 'data' parameter
+@app.route("/create/<fileName>", methods = ['POST'])
 def createFile(fileName):
-    data = "print(\"Hello World!\")"
-    path = "./DevEnv"
-    with open(os.path.join(path, fileName), "w") as fileF:
-        fileF.write(data)
-    return "File Created!"
+    return "To Be Implemented..."
 
-@app.route("/file/<filePath>")
-def getFileData(filePath):
-    return "File at", filePath
+# Should recieve a json object with the file name and the path of the directory the file is in
+@app.route("/retrieve/", methods = ['GET'])
+def retrieveFile():
+    directory = request.headers.get("directory")
+    fileName = request.headers.get("fileName")\
+
+    try:
+        file = open(directory + "/" + fileName, "r")
+    except TypeError:
+        return "Invalid/Missing header"
+    except FileNotFoundError:
+        return "File not found :("
+
+    toReturn = file.read()
+    file.close()
+    return {"data": toReturn}
 
 @app.route("/shell/<command>")
 def sendCommand(command):

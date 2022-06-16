@@ -22,9 +22,11 @@
       </div>
       <div id="fileOpener" class="control">
         <form id="fileChooser">
-          <label for="filePath">File Name:</label>
+          <label for="filePath">File Directory:</label>
           <input type="text" id="filePath" name="filePath">
-          <input type="submit" value="Submit" id="fileSubmitButton">
+          <label for="fileName">File Name:</label>
+          <input type="text" id="fileName" name="fileName">
+          <input type="submit" onClick="getFile()" id="fileSubmitButton">
         </form>
       </div>
     </div>
@@ -33,7 +35,6 @@
     <script src="./scripts/editorManager.js"></script>
     <!-- --------------- -->
 
-    <script src="./scripts/commandSender.js"></script>
-    <script src="./scripts/fileChooser.js"></script>
+    <script src="./scripts/getFile.js"></script>
   </body>
 </html>
