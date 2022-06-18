@@ -32,7 +32,7 @@ def createFile(fileName):
 @app.route("/retrieve/", methods = ['GET'])
 def retrieveFile():
     directory = request.headers.get("directory")
-    fileName = request.headers.get("fileName")\
+    fileName = request.headers.get("fileName")
 
     try:
         file = open(directory + "/" + fileName, "r")
@@ -41,9 +41,12 @@ def retrieveFile():
     except FileNotFoundError:
         return "File not found :("
 
-    toReturn = file.read()
+    fileContent = file.read()
     file.close()
-    return {"data": toReturn}
+
+    response = Response(fileContent, 200, )
+    response.headers["Access-Control-Allow-Origin"] = "*"
+    return {"data": fileContent}
 
 @app.route("/shell/<command>")
 def sendCommand(command):
