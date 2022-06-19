@@ -1,5 +1,7 @@
 import os
 import subprocess
+import json
+
 # from flask import Flask
 from flask import *
 from flask_cors import CORS
@@ -20,35 +22,65 @@ def replaceSubStr(str, sub, repl):
 def runCommand(cmd):
     return subprocess.check_output(["C:\Windows\System32\WindowsPowerShell\\v1.0\powershell.exe", cmd], shell=True)
 
+def is_safe_path(basedir, path, follow_symlinks=True):
+    # Credit to: https://security.openstack.org/guidelines/dg_using-file-paths.html
+    if follow_symlinks:
+        matchpath = os.path.realpath(path)
+    else:
+        matchpath = os.path.abspath(path)
+    return basedir == os.path.commonpath((basedir, matchpath))
+
+
 app = Flask(__name__)
 CORS(app)
 
-# Should receive a json object with the text to update in the 'data' parameter
-@app.route("/create/<fileName>", methods = ['POST'])
-def createFile(fileName):
-    return "To Be Implemented..."
+# Creates a file / or updates one
+@app.route("/create/", methods = ['POST'])
+def createFile():
+    directory = request.headers.get("directory")
+    fileName = request.headers.get("fileName")
 
-# Should recieve a json object with the file name and the path of the directory the file is in
+    finalDir = directory + "/" + fileName
+
+    if not is_safe_path(os.getcwd(), finalDir):
+        return Response(None, 403)
+
+    data = json.loads(request.data)
+
+    fileContent = str(data["data"])
+
+    with open(finalDir, "w") as file:
+        file.write(fileContent)
+
+    return str(data["data"])
+
+# Returns the content of a specified file
 @app.route("/retrieve/", methods = ['GET'])
 def retrieveFile():
     directory = request.headers.get("directory")
     fileName = request.headers.get("fileName")
 
+    finalDir = directory + "/" + fileName
+
+    if not is_safe_path(os.getcwd(), finalDir):
+        return Response(None, 403)
+
     try:
         file = open(directory + "/" + fileName, "r")
     except TypeError:
-        return "Invalid/Missing header"
+        return Response("Invalid/Missing header", 405)
     except FileNotFoundError:
-        return "File not found :("
+        return Response("File not Found :(", 404)
 
     fileContent = file.read()
     file.close()
 
-    response = Response(fileContent, 200, )
-    response.headers["Access-Control-Allow-Origin"] = "*"
+    # TO DO - implement Responses
+    # response = Response(fileContent, 200, )
+    # response.headers["Access-Control-Allow-Origin"] = "*"
+
     return {"data": fileContent}
 
-@app.route("/shell/<command>")
-def sendCommand(command):
-    output = formatOut(str(runCommand(command)))
-    return "<p>" + output + "</p>"
+@app.route("/shell/")
+def sendCommand():
+    return "To Be Implemented..."
