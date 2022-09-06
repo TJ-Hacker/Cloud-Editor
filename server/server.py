@@ -34,28 +34,36 @@ def is_safe_path(basedir, path, follow_symlinks=True):
 app = Flask(__name__)
 CORS(app)
 
+@app.route("/tree/", methods = ["GET"])
+def getDirectoryContent():
+    directory = request.headers.get("directory")
+    dirList = []
+
+
+    return {"data" : dirList}
+
 # Creates a file / or updates one
-@app.route("/create/", methods = ['POST'])
+@app.route("/create/", methods = ["POST"])
 def createFile():
     directory = request.headers.get("directory")
     fileName = request.headers.get("fileName")
 
-    finalDir = directory + "/" + fileName
+    finalPath = directory + "/" + fileName
 
-    if not is_safe_path(os.getcwd(), finalDir):
+    if not is_safe_path(os.getcwd(), finalPath):
         return Response(None, 403)
 
     data = json.loads(request.data)
 
     fileContent = str(data["data"])
 
-    with open(finalDir, "w") as file:
+    with open(finalPath, "w") as file:
         file.write(fileContent)
 
     return str(data["data"])
 
 # Returns the content of a specified file
-@app.route("/retrieve/", methods = ['GET'])
+@app.route("/retrieve/", methods = ["GET"])
 def retrieveFile():
     directory = request.headers.get("directory")
     fileName = request.headers.get("fileName")
@@ -81,6 +89,6 @@ def retrieveFile():
 
     return {"data": fileContent}
 
-@app.route("/shell/")
+@app.route("/shell/", methods = ["POST"])
 def sendCommand():
     return "To Be Implemented..."

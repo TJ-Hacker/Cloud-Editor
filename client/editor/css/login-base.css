@@ -1,0 +1,24 @@
+#navbar {
+  display: flex;
+  justify-content: flex-end;
+  align-items: stretch;
+}
+
+#main {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#login {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+
+  width: 30%;
+
+  border-style: solid;
+  border-radius: 20px;
+  border-width: 1%;
+}
